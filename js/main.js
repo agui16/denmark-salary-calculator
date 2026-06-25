@@ -85,26 +85,25 @@ if (langSelect) {
     });
 }
 
-// 4. Lógica del cálculo matemático y desglose
+// 4. Lógica del cálculo matemático y desglose (CORREGIDO)
 document.getElementById('calc-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
-    // Extracción segura usando la nueva función helper
     const horas = parseInputValue('horas');
     const valorHora = parseInputValue('valorHora');
     const fradrag = parseInputValue('fradrag');
     const impuesto = parseInputValue('impuesto');
     
-    // Validación de campos obligatorios usando el idioma actual
     if (horas === 0 || valorHora === 0) {
         const currentLang = localStorage.getItem('preferred-lang') || 'en';
         alert(translations[currentLang]["alert-fields"]);
         return;
     }
     
+    // 1. SALARIO BRUTO
     const salarioBruto = horas * valorHora;
     
-    // Tramos oficiales de ATP
+    // 2. CÁLCULO DE ATP
     let atp = 0;
     if (horas >= 117) {
         atp = 99.00;
@@ -113,11 +112,13 @@ document.getElementById('calc-form').addEventListener('submit', (e) => {
     } else if (horas >= 39) {
         atp = 33.00;
     }
-    
     if (salarioBruto < atp) atp = 0;
     
+    // 3. CÁLCULO DE AM-BIDRAG (Se redondea de entrada para evitar desfasajes)
     const amIndkomst = salarioBruto - atp;
-    const amBidrag = amIndkomst * 0.08;
+    const amBidrag = Math.round(amIndkomst * 0.08); // Redondeado oficial
+    
+    // 4. CÁLCULO DE A-SKAT
     const baseA_Skat = amIndkomst - amBidrag - fradrag;
     
     let aSkat = 0;
@@ -125,14 +126,14 @@ document.getElementById('calc-form').addEventListener('submit', (e) => {
         aSkat = Math.round(baseA_Skat * (impuesto / 100));
     }
     
-    const amBidragRedondeado = Math.round(amBidrag);
-    const salarioNeto = Math.max(0, salarioBruto - atp - amBidragRedondeado - aSkat);
+    // 5. SALARIO NETO (La resta limpia con los valores ya redondeados)
+    const salarioNeto = Math.max(0, salarioBruto - atp - amBidrag - aSkat);
     
-    // Renderizado en la interfaz
+    // Renderizado en la interfaz (Verificá que estos IDs existan en tu HTML)
     document.getElementById('resultadoTexto').innerText = formatDKK(salarioNeto);
     document.getElementById('out-bruto').innerText = formatDKK(salarioBruto);
     document.getElementById('out-atp').innerText = formatDKK(atp);
-    document.getElementById('out-ambidrag').innerText = formatDKK(amBidragRedondeado);
+    document.getElementById('out-ambidrag').innerText = formatDKK(amBidrag); // Usamos la variable limpia
     document.getElementById('out-askat').innerText = formatDKK(aSkat);
     
     document.getElementById('resultadoBox').style.display = 'block';
