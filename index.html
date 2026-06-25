@@ -33,23 +33,23 @@
         <form id="calc-form">
             <div class="input-group">
                 <label for="horas" data-i18n="label-hours">Hours worked per month</label>
-                <input type="number" id="horas" placeholder="Ej: 160" min="0" step="any" inputmode="decimal" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="horas" placeholder="Ej: 160" min="0" step="any" inputmode="decimal" required>
             </div>
             
             <div class="input-group">
                 <label for="valorHora" data-i18n="label-rate">Hourly rate (DKK)</label>
-                <input type="number" id="valorHora" placeholder="Ej: 150" min="0" step="any" inputmode="decimal" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="valorHora" placeholder="Ej: 150" min="0" step="any" inputmode="decimal" required>
             </div>
             
             <div class="input-group">
                 <label for="fradrag" data-i18n="label-fradrag">Monthly Fradrag (Tax-free allowance DKK)</label>
-                <input type="number" id="fradrag" placeholder="Ej: 4000" min="0" step="any" inputmode="decimal" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="fradrag" placeholder="Ej: 4000" min="0" step="any" inputmode="decimal" required>
                 <small class="help-text" data-i18n="help-skat">You can find this on your SKAT tax card.</small>
             </div>
             
             <div class="input-group">
                 <label for="impuesto" data-i18n="label-tax">Tax percentage (A-skat %)</label>
-                <input type="number" id="impuesto" placeholder="Ej: 38" min="0" max="100" step="any" inputmode="decimal" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="impuesto" placeholder="Ej: 38" min="0" max="100" step="any" inputmode="decimal" required>
             </div>
             
             <button type="submit" id="btnCalcular" data-i18n="btn-calculate">Calculate Net Salary</button>

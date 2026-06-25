@@ -1,15 +1,22 @@
+/* 1. Base del documento con Flexbox vertical */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     color: #333;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column; /* Alineación vertical para empujar el footer */
     min-height: 100vh;
-    margin: 0;
     padding: 20px;
     box-sizing: border-box;
+    position: relative;
 }
+
+/* 2. Contenedor principal (La tarjeta de la calculadora) */
 .container {
     background: white;
     padding: 30px;
@@ -17,28 +24,35 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 440px;
+    margin: auto auto 30px auto; /* Centra la tarjeta y deja margen abajo para el footer */
+    box-sizing: border-box;
 }
+
 h1 {
     font-size: 22px;
     margin-top: 0;
     margin-bottom: 10px;
     color: #d00;
 }
+
 .description {
     font-size: 13px;
     color: #666;
     margin-bottom: 20px;
     line-height: 1.4;
 }
+
 .input-group {
     margin-bottom: 15px;
 }
+
 label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
     font-size: 13px;
 }
+
 input {
     width: 100%;
     padding: 10px;
@@ -47,16 +61,19 @@ input {
     box-sizing: border-box;
     font-size: 14px;
 }
+
 input:focus {
     border-color: #d00;
     outline: none;
 }
+
 .help-text {
     font-size: 11px;
     color: #888;
     display: block;
     margin-top: 3px;
 }
+
 button {
     width: 100%;
     padding: 12px;
@@ -69,9 +86,12 @@ button {
     font-weight: bold;
     margin-top: 10px;
 }
+
 button:hover {
     background-color: #b00;
 }
+
+/* 3. Caja de Resultados (Crece dinámicamente) */
 .result {
     margin-top: 25px;
     padding: 20px;
@@ -80,11 +100,13 @@ button:hover {
     border-radius: 6px;
     display: none;
 }
+
 .result h3 {
     margin: 0 0 5px 0;
     color: #2e7d32;
     font-size: 15px;
 }
+
 .net-salary-display {
     font-size: 24px;
     font-weight: bold;
@@ -93,12 +115,14 @@ button:hover {
     border-bottom: 2px solid #ccf0cc;
     padding-bottom: 10px;
 }
-/* Estilos del Desglose */
+
+/* Desglose */
 .breakdown h4 {
     margin: 0 0 8px 0;
     font-size: 13px;
     color: #555;
 }
+
 .breakdown-item {
     display: flex;
     justify-content: space-between;
@@ -106,10 +130,12 @@ button:hover {
     margin-bottom: 6px;
     color: #666;
 }
+
 .breakdown-item:last-child {
     margin-bottom: 0;
 }
-/* Selector de Idioma */
+
+/* 4. Selector de Idioma */
 .lang-selector-container {
     position: absolute;
     top: 20px;
@@ -118,11 +144,13 @@ button:hover {
     align-items: center;
     gap: 8px;
 }
+
 .select-label {
     font-size: 12px;
     font-weight: bold;
     color: #666;
 }
+
 .lang-dropdown {
     padding: 4px 8px;
     font-size: 12px;
@@ -131,23 +159,24 @@ button:hover {
     background: white;
     cursor: pointer;
 }
-/* Estilos del Footer */
+
+/* 5. Estilos del Footer Arreglados */
 .main-footer {
-    position: absolute;
-    bottom: 15px;
+    flex-shrink: 0; /* Evita que el footer colapse o se deforme */
     width: 100%;
     text-align: center;
-    left: 0;
+    padding: 15px 0;
+    margin-top: auto; /* Truco de Flexbox: empuja el footer al fondo si sobra pantalla */
 }
 
 .main-footer p {
-    font-size: 12px;
+    font-size: 13px;
     color: #777;
     margin: 0;
 }
 
 .main-footer a {
-    color: #d00; /* Color rojo danés para combinar */
+    color: #d00;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.2s ease;
@@ -158,15 +187,20 @@ button:hover {
     text-decoration: underline;
 }
 
-@media (max-height: 650px) {
+/* 6. Media Query para pantallas chicas (Celulares) */
+@media (max-width: 480px) {
     body {
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-bottom: 60px;
+        padding: 15px;
+        padding-top: 60px; /* Le da espacio al selector de idioma en la parte superior */
     }
-    .main-footer {
-        position: relative;
-        margin-top: 30px;
-        bottom: 0;
+    
+    .container {
+        margin-top: 10px;
+        padding: 20px;
+    }
+    
+    .lang-selector-container {
+        right: 15px;
+        top: 15px;
     }
 }

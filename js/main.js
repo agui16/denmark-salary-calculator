@@ -1,7 +1,7 @@
 // 1. Diccionario de traducciones expandido
 const translations = {
     en: {
-        "title": "Denmark Salary Calculator",
+        "title": "Denmark Salary Calculator | Calculate Net Salary",
         "heading": "Calculate your salary after taxes in Denmark",
         "description": "Enter your monthly details to estimate your take-home pay based on official Danish tax rules.",
         "label-language": "Language:",
@@ -13,10 +13,11 @@ const translations = {
         "btn-calculate": "Calculate Net Salary",
         "result-title": "Estimated Net Salary:",
         "breakdown-title": "Breakdown:",
-        "b-gross": "Gross Salary:"
+        "b-gross": "Gross Salary:",
+        "alert-fields": "Please enter the hours worked and your hourly rate."
     },
     es: {
-        "title": "Calculadora de Salario - Dinamarca",
+        "title": "Calculadora de Salario Dinamarca 🇩🇰 | Sueldo Neto",
         "heading": "Calcula tu salario neto en Dinamarca",
         "description": "Ingresa tus datos mensuales para estimar tu salario en mano según las reglas fiscales danesas.",
         "label-language": "Idioma:",
@@ -28,13 +29,27 @@ const translations = {
         "btn-calculate": "Calcular Salario Neto",
         "result-title": "Salario Neto Estimado:",
         "breakdown-title": "Desglose:",
-        "b-gross": "Salario Bruto:"
+        "b-gross": "Salario Bruto:",
+        "alert-fields": "Por favor, ingresá las horas trabajadas y el valor de la hora."
     }
 };
 
 // Función auxiliar para formatear números al estilo danés (10.000,00)
 function formatDKK(amount) {
     return `${amount.toLocaleString('da-DK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} DKK`;
+}
+
+// Función auxiliar para parsear inputs de forma segura soportando puntos y comas de celulares
+function parseInputValue(id) {
+    const element = document.getElementById(id);
+    if (!element || !element.value) return 0;
+    
+    // Reemplaza comas por puntos antes de parsear
+    const cleanValue = element.value.replace(',', '.');
+    const parsed = parseFloat(cleanValue);
+    
+    // Si da un número inválido (NaN), devolvemos 0 de forma segura
+    return isNaN(parsed) ? 0 : parsed;
 }
 
 // 2. Función para procesar el cambio de idioma
@@ -60,22 +75,32 @@ function changeLanguage(lang) {
 const langSelect = document.getElementById('lang-select');
 const savedLang = localStorage.getItem('preferred-lang') || 'en'; // Inglés por defecto
 
-langSelect.value = savedLang;
-changeLanguage(savedLang);
+if (langSelect) {
+    langSelect.value = savedLang;
+    changeLanguage(savedLang);
 
-// Listener para cambios manuales del dropdown
-langSelect.addEventListener('change', (e) => {
-    changeLanguage(e.target.value);
-});
+    // Listener para cambios manuales del dropdown
+    langSelect.addEventListener('change', (e) => {
+        changeLanguage(e.target.value);
+    });
+}
 
 // 4. Lógica del cálculo matemático y desglose
 document.getElementById('calc-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const horas = parseFloat(document.getElementById('horas').value);
-    const valorHora = parseFloat(document.getElementById('valorHora').value);
-    const fradrag = parseFloat(document.getElementById('fradrag').value);
-    const impuesto = parseFloat(document.getElementById('impuesto').value);
+    // Extracción segura usando la nueva función helper
+    const horas = parseInputValue('horas');
+    const valorHora = parseInputValue('valorHora');
+    const fradrag = parseInputValue('fradrag');
+    const impuesto = parseInputValue('impuesto');
+    
+    // Validación de campos obligatorios usando el idioma actual
+    if (horas === 0 || valorHora === 0) {
+        const currentLang = localStorage.getItem('preferred-lang') || 'en';
+        alert(translations[currentLang]["alert-fields"]);
+        return;
+    }
     
     const salarioBruto = horas * valorHora;
     
