@@ -204,3 +204,12 @@ button:hover {
         top: 15px;
     }
 }
+
+.checkbox-group {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.checkbox-group input[type="checkbox"] {
+    cursor: pointer;
+    transform: scale(1.2); /* Hace el cuadradito un toque más grande y fácil de tocar en celus */
+}

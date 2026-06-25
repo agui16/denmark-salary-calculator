@@ -51,6 +51,29 @@
                 <label for="impuesto" data-i18n="label-tax">Tax percentage (A-skat %)</label>
                 <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="impuesto" placeholder="Ej: 38" min="0" max="100" step="any" inputmode="decimal" required>
             </div>
+
+            <!-- Checkbox Segundo Trabajo -->
+            <div class="input-group checkbox-group">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="segundo-trabajo-check" style="width: auto;">
+                    <span data-i18n="check-second-job">Tengo un segundo trabajo</span>
+                </label>
+            </div>
+
+            <!-- Inputs Segundo Trabajo (Ocultos por defecto) -->
+            <div id="segundo-trabajo-box" style="display: none; border-top: 1px dashed #ccc; padding-top: 15px; margin-bottom: 15px;">
+                <h4 style="margin: 0 0 12px 0; color: #555; font-size: 14px;" data-i18n="title-second-job">Segundo Trabajo (Tarjeta B)</h4>
+                
+                <div class="input-group">
+                    <label for="horas2" data-i18n="label-hours">Horas trabajadas al mes</label>
+                    <input type="text" id="horas2" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00">
+                </div>
+                
+                <div class="input-group">
+                    <label for="valorHora2" data-i18n="label-rate">Valor por hora (DKK)</label>
+                    <input type="text" id="valorHora2" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" placeholder="0.00">
+                </div>
+            </div>
             
             <button type="submit" id="btnCalcular" data-i18n="btn-calculate">Calculate Net Salary</button>
         </form>

@@ -1,4 +1,4 @@
-// 1. Diccionario de traducciones expandido
+// 1. Diccionario de traducciones unificado y corregido
 const translations = {
     en: {
         "title": "Denmark Salary Calculator | Calculate Net Salary",
@@ -14,7 +14,9 @@ const translations = {
         "result-title": "Estimated Net Salary:",
         "breakdown-title": "Breakdown:",
         "b-gross": "Gross Salary:",
-        "alert-fields": "Please enter the hours worked and your hourly rate."
+        "alert-fields": "Please enter the hours worked and your hourly rate for your primary job.",
+        "check-second-job": "I have a second job",
+        "title-second-job": "Second Job (Tax Card B)"
     },
     es: {
         "title": "Calculadora de Salario Dinamarca 🇩🇰 | Sueldo Neto",
@@ -30,7 +32,9 @@ const translations = {
         "result-title": "Salario Neto Estimado:",
         "breakdown-title": "Desglose:",
         "b-gross": "Salario Bruto:",
-        "alert-fields": "Por favor, ingresá las horas trabajadas y el valor de la hora."
+        "alert-fields": "Por favor, ingresá las horas trabajadas y el valor de la hora del trabajo principal.",
+        "check-second-job": "Tengo un segundo trabajo",
+        "title-second-job": "Segundo Trabajo (Tarjeta B)"
     }
 };
 
@@ -54,7 +58,8 @@ function parseInputValue(id) {
 
 // 2. Función para procesar el cambio de idioma
 function changeLanguage(lang) {
-    document.getElementById('html-tag').setAttribute('lang', lang);
+    const htmlTag = document.getElementById('html-tag');
+    if (htmlTag) htmlTag.setAttribute('lang', lang);
     
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
@@ -85,56 +90,126 @@ if (langSelect) {
     });
 }
 
-// 4. Lógica del cálculo matemático y desglose (CORREGIDO)
+// --- Control de visibilidad y validación del segundo trabajo ---
+const checkboxSegundoTrabajo = document.getElementById('segundo-trabajo-check');
+const boxSegundoTrabajo = document.getElementById('segundo-trabajo-box');
+const horas2Input = document.getElementById('horas2');
+const valorHora2Input = document.getElementById('valorHora2');
+
+if (checkboxSegundoTrabajo && boxSegundoTrabajo) {
+    checkboxSegundoTrabajo.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            boxSegundoTrabajo.style.display = 'block';
+            // Hacemos que los campos sean obligatorios si el check está activo
+            if (horas2Input) horas2Input.required = true;
+            if (valorHora2Input) valorHora2Input.required = true;
+        } else {
+            boxSegundoTrabajo.style.display = 'none';
+            // Sacamos la obligatoriedad si se desmarca
+            if (horas2Input) {
+                horas2Input.required = false;
+                horas2Input.value = ''; // Limpiamos el valor
+            }
+            if (valorHora2Input) {
+                valorHora2Input.required = false;
+                valorHora2Input.value = ''; // Limpiamos el valor
+            }
+        }
+    });
+}
+
+// --- Restricción de caracteres en tiempo real (Evita letras en PC y duplica puntos/comas) ---
+const numericInputs = ['horas', 'valorHora', 'fradrag', 'impuesto', 'horas2', 'valorHora2'];
+numericInputs.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+        input.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^0-9.,]/g, '');
+            const parts = value.split(/[.,]/);
+            if (parts.length > 2) {
+                const separator = value.match(/[.,]/)[0];
+                value = parts[0] + separator + parts.slice(1).join('');
+            }
+            e.target.value = value;
+        });
+    }
+});
+
+// 4. Lógica del cálculo matemático y desglose consolidado
 document.getElementById('calc-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
+    // Trabajo 1 (Principal)
     const horas = parseInputValue('horas');
     const valorHora = parseInputValue('valorHora');
     const fradrag = parseInputValue('fradrag');
     const impuesto = parseInputValue('impuesto');
     
+    // Validación obligatoria Trabajo 1
     if (horas === 0 || valorHora === 0) {
         const currentLang = localStorage.getItem('preferred-lang') || 'en';
         alert(translations[currentLang]["alert-fields"]);
         return;
     }
     
-    // 1. SALARIO BRUTO
-    const salarioBruto = horas * valorHora;
+    // Trabajo 2 (Secundario - solo si el checkbox está activo)
+    const tieneSegundoTrabajo = checkboxSegundoTrabajo ? checkboxSegundoTrabajo.checked : false;
+    const horas2 = tieneSegundoTrabajo ? parseInputValue('horas2') : 0;
+    const valorHora2 = tieneSegundoTrabajo ? parseInputValue('valorHora2') : 0;
     
-    // 2. CÁLCULO DE ATP
-    let atp = 0;
-    if (horas >= 117) {
-        atp = 99.00;
-    } else if (horas >= 78) {
-        atp = 66.00;
-    } else if (horas >= 39) {
-        atp = 33.00;
+    // 1. SALARIOS BRUTOS
+    const salarioBruto1 = horas * valorHora;
+    const salarioBruto2 = horas2 * valorHora2;
+    const salarioBrutoTotal = salarioBruto1 + salarioBruto2;
+    
+    // 2. CÁLCULO DE ATP ÚNICO (Basado en la suma consolidada de horas)
+    const horasTotales = horas + horas2;
+    let atpTotal = 0;
+    if (horasTotales >= 117) {
+        atpTotal = 99.00;
+    } else if (horasTotales >= 78) {
+        atpTotal = 66.00;
+    } else if (horasTotales >= 39) {
+        atpTotal = 33.00;
     }
-    if (salarioBruto < atp) atp = 0;
+    if (salarioBrutoTotal < atpTotal) atpTotal = 0;
     
-    // 3. CÁLCULO DE AM-BIDRAG (Se redondea de entrada para evitar desfasajes)
-    const amIndkomst = salarioBruto - atp;
-    const amBidrag = Math.round(amIndkomst * 0.08); // Redondeado oficial
+    // 3. CÁLCULO DE AM-BIDRAG SEPARADOS CON REDONDEO OFICIAL
+    // El ATP oficial se descuenta de la base del trabajo principal
+    const amIndkomst1 = Math.max(0, salarioBruto1 - atpTotal); 
+    const amBidrag1 = Math.round(amIndkomst1 * 0.08);
+    
+    const amIndkomst2 = salarioBruto2;
+    const amBidrag2 = Math.round(amIndkomst2 * 0.08);
+    
+    const amBidragTotal = amBidrag1 + amBidrag2;
     
     // 4. CÁLCULO DE A-SKAT
-    const baseA_Skat = amIndkomst - amBidrag - fradrag;
-    
-    let aSkat = 0;
-    if (baseA_Skat > 0) {
-        aSkat = Math.round(baseA_Skat * (impuesto / 100));
+    // Trabajo 1: Aplica Fradrag
+    const baseA_Skat1 = amIndkomst1 - amBidrag1 - fradrag;
+    let aSkat1 = 0;
+    if (baseA_Skat1 > 0) {
+        aSkat1 = Math.round(baseA_Skat1 * (impuesto / 100));
     }
     
-    // 5. SALARIO NETO (La resta limpia con los valores ya redondeados)
-    const salarioNeto = Math.max(0, salarioBruto - atp - amBidrag - aSkat);
+    // Trabajo 2: Sin Fradrag (Tarjeta B)
+    const baseA_Skat2 = amIndkomst2 - amBidrag2;
+    let aSkat2 = 0;
+    if (baseA_Skat2 > 0) {
+        aSkat2 = Math.round(baseA_Skat2 * (impuesto / 100));
+    }
     
-    // Renderizado en la interfaz (Verificá que estos IDs existan en tu HTML)
-    document.getElementById('resultadoTexto').innerText = formatDKK(salarioNeto);
-    document.getElementById('out-bruto').innerText = formatDKK(salarioBruto);
-    document.getElementById('out-atp').innerText = formatDKK(atp);
-    document.getElementById('out-ambidrag').innerText = formatDKK(amBidrag); // Usamos la variable limpia
-    document.getElementById('out-askat').innerText = formatDKK(aSkat);
+    const aSkatTotal = aSkat1 + aSkat2;
+    
+    // 5. SALARIO NETO TOTAL CONSOLIDADO
+    const salarioNetoTotal = Math.max(0, salarioBrutoTotal - atpTotal - amBidragTotal - aSkatTotal);
+    
+    // Renderizado en la interfaz
+    document.getElementById('resultadoTexto').innerText = formatDKK(salarioNetoTotal);
+    document.getElementById('out-bruto').innerText = formatDKK(salarioBrutoTotal);
+    document.getElementById('out-atp').innerText = formatDKK(atpTotal);
+    document.getElementById('out-ambidrag').innerText = formatDKK(amBidragTotal);
+    document.getElementById('out-askat').innerText = formatDKK(aSkatTotal);
     
     document.getElementById('resultadoBox').style.display = 'block';
 });
