@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" id="html-tag">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">Denmark Salary Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <div class="lang-selector-container">
+        <label for="lang-select" data-i18n="label-language" class="select-label">Language:</label>
+        <select id="lang-select" class="lang-dropdown">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <h1 data-i18n="heading">Calculate your salary after taxes in Denmark</h1>
+        <p data-i18n="description" class="description">Enter your monthly details to estimate your take-home pay based on official Danish tax rules.</p>
+        
+        <form id="calc-form">
+            <div class="input-group">
+                <label for="horas" data-i18n="label-hours">Hours worked per month</label>
+                <input type="number" id="horas" placeholder="Ej: 160" min="0" step="any" inputmode="decimal" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="valorHora" data-i18n="label-rate">Hourly rate (DKK)</label>
+                <input type="number" id="valorHora" placeholder="Ej: 150" min="0" step="any" inputmode="decimal" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="fradrag" data-i18n="label-fradrag">Monthly Fradrag (Tax-free allowance DKK)</label>
+                <input type="number" id="fradrag" placeholder="Ej: 4000" min="0" step="any" inputmode="decimal" required>
+                <small class="help-text" data-i18n="help-skat">You can find this on your SKAT tax card.</small>
+            </div>
+            
+            <div class="input-group">
+                <label for="impuesto" data-i18n="label-tax">Tax percentage (A-skat %)</label>
+                <input type="number" id="impuesto" placeholder="Ej: 38" min="0" max="100" step="any" inputmode="decimal" required>
+            </div>
+            
+            <button type="submit" id="btnCalcular" data-i18n="btn-calculate">Calculate Net Salary</button>
+        </form>
+        
+        <div class="result" id="resultadoBox">
+            <h3 data-i18n="result-title">Estimated Net Salary:</h3>
+            <p id="resultadoTexto" class="net-salary-display"></p>
+            
+            <div class="breakdown">
+                <h4 data-i18n="breakdown-title">Breakdown:</h4>
+                <div class="breakdown-item">
+                    <span data-i18n="b-gross">Gross Salary:</span>
+                    <span id="out-bruto">0.00 DKK</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>ATP:</span>
+                    <span id="out-atp">0.00 DKK</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>AM-bidrag (8%):</span>
+                    <span id="out-ambidrag">0.00 DKK</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>A-skat:</span>
+                    <span id="out-askat">0.00 DKK</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

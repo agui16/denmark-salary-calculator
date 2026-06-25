@@ -1,0 +1,133 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 440px;
+}
+h1 {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #d00;
+}
+.description {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+.input-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 13px;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+input:focus {
+    border-color: #d00;
+    outline: none;
+}
+.help-text {
+    font-size: 11px;
+    color: #888;
+    display: block;
+    margin-top: 3px;
+}
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #d00;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #b00;
+}
+.result {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #f8fff8;
+    border: 1px solid #ccf0cc;
+    border-radius: 6px;
+    display: none;
+}
+.result h3 {
+    margin: 0 0 5px 0;
+    color: #2e7d32;
+    font-size: 15px;
+}
+.net-salary-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2e7d32;
+    margin: 0 0 15px 0;
+    border-bottom: 2px solid #ccf0cc;
+    padding-bottom: 10px;
+}
+/* Estilos del Desglose */
+.breakdown h4 {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #555;
+}
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #666;
+}
+.breakdown-item:last-child {
+    margin-bottom: 0;
+}
+/* Selector de Idioma */
+.lang-selector-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.select-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+}
+.lang-dropdown {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+}
