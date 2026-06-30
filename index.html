@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" id="html-tag">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- SEO Básico -->
     <title>Calculadora de Sueldo Neto en Dinamarca 🇩🇰 | Denmark Salary Calculator</title>
-    <meta name="description" content="Calculá tu salario neto real en Dinamarca de forma fácil y exacta. Replicá las reglas de SKAT calculando el ATP, AM-bidrag y tu Fradrag personal.">
-    <meta name="keywords" content="calculadora sueldo dinamarca, salario neto dinamarca, impuestos dinamarca, skat, fradrag, working holiday dinamarca">
+    <meta name="description"
+        content="Calculá tu salario neto real en Dinamarca de forma fácil y exacta. Replicá las reglas de SKAT calculando el ATP, AM-bidrag y tu Fradrag personal.">
+    <meta name="keywords"
+        content="calculadora sueldo dinamarca, salario neto dinamarca, impuestos dinamarca, skat, fradrag, working holiday dinamarca">
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://denmark-salary-calculator.agus-aguirre16.workers.dev/">
     <meta property="og:title" content="Calculadora de Sueldo Neto en Dinamarca 🇩🇰">
-    <meta property="og:description" content="Calculá tu salario neto real en Dinamarca de forma exacta. Compatible con las reglas de SKAT (ATP, AM-bidrag y Fradrag).">
+    <meta property="og:description"
+        content="Calculá tu salario neto real en Dinamarca de forma exacta. Compatible con las reglas de SKAT (ATP, AM-bidrag y Fradrag).">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇩🇰</text></svg>">
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="7cd9d448-273f-41a7-9564-3da2bc11518e"></script>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇩🇰</text></svg>">
+    <script defer src="https://cloud.umami.is/script.js"
+        data-website-id="7cd9d448-273f-41a7-9564-3da2bc11518e"></script>
 </head>
+
 <body>
 
     <div class="lang-selector-container">
@@ -28,37 +35,56 @@
 
     <div class="container">
         <h1 data-i18n="heading">Calculate your salary after taxes in Denmark</h1>
-        <p data-i18n="description" class="description">Enter your monthly details to estimate your take-home pay based on official Danish tax rules.</p>
-        
+        <p data-i18n="description" class="description">Enter your monthly details to estimate your take-home pay based
+            on official Danish tax rules.</p>
+
         <form id="calc-form">
-            <div class="input-group">
-                <label for="horas" data-i18n="label-hours">Hours worked per month</label>
-                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="horas" placeholder="Ej: 160" min="0" step="any" inputmode="decimal" required>
+            <div class="salary-type-switch">
+                <input type="radio" id="type-hourly" name="salary-type" value="hourly" checked>
+                <label for="type-hourly" data-i18n="mode-hourly">Por Hora</label> <input type="radio" id="type-monthly"
+                    name="salary-type" value="monthly">
+                <label for="type-monthly" data-i18n="mode-monthly">Por Mes</label>
+                <div class="switch-slider"></div>
             </div>
-            
-            <div class="input-group">
-                <label for="valorHora" data-i18n="label-rate">Hourly rate (DKK)</label>
-                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="valorHora" placeholder="Ej: 150" min="0" step="any" inputmode="decimal" required>
+
+            <div id="wrapper-hourly" class="input-conditional-group">
+                <div class="input-group">
+                    <label for="hours-input" data-i18n="label-hours">Hours worked per month</label> <input type="number"
+                        id="hours-input" inputmode="decimal" placeholder="Ej: 160.33">
+                </div>
+                <div class="input-group">
+                    <label for="rate-input" data-i18n="label-rate">Hourly rate (DKK)</label> <input type="number"
+                        id="rate-input" inputmode="decimal" placeholder="Ej: 150">
+                </div>
             </div>
-            
+
+            <div id="wrapper-monthly" class="input-conditional-group hidden">
+                <div class="input-group">
+                    <label for="gross-monthly-input" data-i18n="label-monthly-gross">Sueldo mensual bruto (DKK)</label>
+                    <input type="number" id="gross-monthly-input" inputmode="decimal" placeholder="Ej: 25000">
+                </div>
+            </div>
+
             <div class="input-group">
                 <label for="fradrag" data-i18n="label-fradrag">Monthly Fradrag (Tax-free allowance DKK)</label>
-                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="fradrag" placeholder="Ej: 4000" min="0" step="any" inputmode="decimal" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="fradrag" placeholder="Ej: 4000" min="0" step="any"
+                    inputmode="decimal" required>
                 <small class="help-text" data-i18n="help-skat">You can find this on your SKAT tax card.</small>
             </div>
-            
+
             <div class="input-group">
                 <label for="impuesto" data-i18n="label-tax">Tax percentage (A-skat %)</label>
-                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="impuesto" placeholder="Ej: 38" min="0" max="100" step="any" inputmode="decimal" required>
+                <input type="text" pattern="[0-9]*[.,]?[0-9]*" id="impuesto" placeholder="Ej: 38" min="0" max="100"
+                    step="any" inputmode="decimal" required>
             </div>
-            
+
             <button type="submit" id="btnCalcular" data-i18n="btn-calculate">Calculate Net Salary</button>
         </form>
-        
+
         <div class="result" id="resultadoBox">
             <h3 data-i18n="result-title">Estimated Net Salary:</h3>
             <p id="resultadoTexto" class="net-salary-display"></p>
-            
+
             <div class="breakdown">
                 <h4 data-i18n="breakdown-title">Breakdown:</h4>
                 <div class="breakdown-item">
@@ -81,9 +107,11 @@
         </div>
     </div>
     <footer class="main-footer">
-        <p>Developed with ❤️ by <a href="https://github.com/agui16" target="_blank" rel="noopener noreferrer">agui16</a></p>
+        <p>Developed with ❤️ by <a href="https://github.com/agui16" target="_blank" rel="noopener noreferrer">agui16</a>
+        </p>
     </footer>
 
     <script src="js/main.js"></script>
 </body>
+
 </html>

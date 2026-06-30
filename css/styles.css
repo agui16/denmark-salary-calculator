@@ -1,5 +1,6 @@
 /* 1. Base del documento con Flexbox vertical */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
 }
@@ -9,7 +10,8 @@ body {
     background-color: #f4f4f9;
     color: #333;
     display: flex;
-    flex-direction: column; /* Alineación vertical para empujar el footer */
+    flex-direction: column;
+    /* Alineación vertical para empujar el footer */
     min-height: 100vh;
     padding: 20px;
     box-sizing: border-box;
@@ -21,10 +23,11 @@ body {
     background: white;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 440px;
-    margin: auto auto 30px auto; /* Centra la tarjeta y deja margen abajo para el footer */
+    margin: auto auto 30px auto;
+    /* Centra la tarjeta y deja margen abajo para el footer */
     box-sizing: border-box;
 }
 
@@ -162,11 +165,13 @@ button:hover {
 
 /* 5. Estilos del Footer Arreglados */
 .main-footer {
-    flex-shrink: 0; /* Evita que el footer colapse o se deforme */
+    flex-shrink: 0;
+    /* Evita que el footer colapse o se deforme */
     width: 100%;
     text-align: center;
     padding: 15px 0;
-    margin-top: auto; /* Truco de Flexbox: empuja el footer al fondo si sobra pantalla */
+    margin-top: auto;
+    /* Truco de Flexbox: empuja el footer al fondo si sobra pantalla */
 }
 
 .main-footer p {
@@ -191,16 +196,84 @@ button:hover {
 @media (max-width: 480px) {
     body {
         padding: 15px;
-        padding-top: 60px; /* Le da espacio al selector de idioma en la parte superior */
+        padding-top: 60px;
+        /* Le da espacio al selector de idioma en la parte superior */
     }
-    
+
     .container {
         margin-top: 10px;
         padding: 20px;
     }
-    
+
     .lang-selector-container {
         right: 15px;
         top: 15px;
     }
+}
+
+/* Contenedor del Switch */
+.salary-type-switch {
+    display: flex;
+    position: relative;
+    background-color: #f1f3f5;
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.salary-type-switch input[type="radio"] {
+    display: none;
+    /* Escondemos el radio button nativo */
+}
+
+.salary-type-switch label {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.2s ease;
+}
+
+/* Cambia el color del texto al estar activo */
+.salary-type-switch input[type="radio"]:checked+label {
+    color: #ffffff;
+}
+
+/* El deslizador de fondo (Fondo oscuro o azul según tu paleta) */
+.salary-type-switch::before {
+    content: "";
+    position: absolute;
+    width: 50%;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    background-color: #d00;
+    border-radius: 6px;
+    transition: transform 0.25s cubic-bezier(0, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* Animación del deslizador hacia la derecha */
+.salary-type-switch:has(#type-monthly:checked)::before,
+.salary-type-switch:has(#type-monthly:checked)::before {
+    transform: translateX(92%);
+    /* Ajustar según padding si es necesario */
+}
+
+/* Clases para mostrar/ocultar los bloques */
+.input-conditional-group {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.input-conditional-group.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
 }
